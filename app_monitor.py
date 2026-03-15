@@ -38,7 +38,6 @@ def send_wechat(token, uid, title, content):
 # --- UI 界面 ---
 
 st.title("🔍 招标项目监控助手")
-st.write("兼容旧版 Streamlit，无需升级即可运行。")
 
 # 侧边栏配置
 with st.sidebar:
