@@ -43,8 +43,8 @@ st.write("兼容旧版 Streamlit，无需升级即可运行。")
 # 侧边栏配置
 with st.sidebar:
     st.header("⚙️ 凭证设置")
-    app_token = st.text_input("WxPusher AppToken", value="AT_axaT8wYgTQxpaJ6OVLLACTOA1MANi9hQ", type="password")
-    my_uid = st.text_input("你的个人 UID", value="UID_nNZLmWrruNwercfOfKg3smvZPJAj")
+    app_token = st.text_input("WxPusher AppToken", value="xxx", type="password")
+    my_uid = st.text_input("你的个人 UID", value="xxx")
 
 target_url = st.text_input("📌 请粘贴项目详情页网址：")
 interval_min = st.number_input("⏰ 监控频率 (分钟)", min_value=1, value=30)
