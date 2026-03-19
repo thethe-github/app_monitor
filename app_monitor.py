@@ -4,7 +4,7 @@ import base64
 import json
 
 # --- 基础配置 ---
-GITHUB_REPO = "thethe-github/monitor"
+GITHUB_REPO = "thethe-github/app_monitor"
 GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"] 
 
 st.set_page_config(page_title="多项目监控中心", page_icon="⚙️")
