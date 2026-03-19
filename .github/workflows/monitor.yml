@@ -1,0 +1,41 @@
+name: Project Monitor
+
+on:
+  schedule:
+    # 这里的 cron 表达式表示每 30 分钟运行一次
+    # 分 时 日 月 周 (注意是 UTC 时间，比北京时间晚 8 小时)
+    - cron: '*/30 * * * *'
+  workflow_dispatch: # 允许你手动点击按钮运行测试
+
+jobs:
+  run-monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v3
+
+    - name: 设置 Python 环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: 安装依赖库
+      run: |
+        pip install requests
+
+    - name: 运行监控脚本
+      env:
+        # 将上面设置的 Secrets 注入到环境变量中
+        WX_APP_TOKEN: ${{ secrets.WX_APP_TOKEN }}
+        WX_MY_UID: ${{ secrets.WX_MY_UID }}
+      run: python test.py
+
+    - name: 保存状态文件
+      # 如果 project_status.json 变了，将其提交回仓库，防止下次运行重复提醒
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add project_status.json
+        git commit -m "Update status" || echo "No changes to commit"
+        git push
