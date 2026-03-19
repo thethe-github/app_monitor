@@ -4,7 +4,7 @@ on:
   schedule:
     # 这里的 cron 表达式表示每 30 分钟运行一次
     # 分 时 日 月 周 (注意是 UTC 时间，比北京时间晚 8 小时)
-    - cron: '*/30 * * * *'
+    - cron: '7,37 * * * *'
   workflow_dispatch: # 允许你手动点击按钮运行测试
 
 jobs:
