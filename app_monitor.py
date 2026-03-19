@@ -5,7 +5,7 @@ import json
 
 # --- 基础配置 ---
 # 请确保这里的仓库路径完全正确
-GITHUB_REPO = "thethe-github/monitor"
+GITHUB_REPO = "thethe-github/app_monitor"
 # GITHUB_TOKEN 需要你在 Streamlit Cloud 后台的 Secrets 中添加
 GITHUB_TOKEN = st.secrets["GITHUB_TOKEN"] 
 
