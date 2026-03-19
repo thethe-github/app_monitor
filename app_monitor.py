@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import base64
 import json
-import time
 
 # --- 基础配置 ---
 GITHUB_REPO = "thethe-github/app_monitor" 
@@ -38,7 +37,7 @@ def push_to_github(new_urls):
 if not st.session_state.file_sha:
     sync_from_github()
 
-# --- 界面 ---
+# --- 界面展示 ---
 st.title("🚀 项目监控配置中心")
 
 # 1. 监控清单
@@ -56,27 +55,30 @@ else:
 
 st.divider()
 
-# 2. 添加监控
+# 2. 添加监控 (使用 Form 解决报错并实现自动清空)
 st.subheader("➕ 添加新项目")
-# 注意这里的 key="input_url"，它是我们手动重置的目标
-new_url = st.text_input("粘贴招标详情页网址：", key="input_url")
 
-if st.button("确认添加", type="primary"):
-    if new_url:
-        if new_url not in st.session_state.urls:
-            # 修改本地状态
-            st.session_state.urls.append(new_url)
-            # --- 核心改动：清空输入框缓存 ---
-            st.session_state.input_url = "" 
-            
-            with st.spinner('同步至云端...'):
-                res = push_to_github(st.session_state.urls)
-                if res.status_code == 200:
-                    st.toast("已同步至后台工人！")
-                    st.rerun() 
-                else:
-                    st.error(f"同步失败: {res.status_code}")
+# clear_on_submit 是灵魂，点击按钮后输入框自动归零
+with st.form("my_form", clear_on_submit=True):
+    new_url = st.text_input("粘贴招标详情页网址：")
+    submitted = st.form_submit_button("确认添加", type="primary")
+    
+    if submitted:
+        if new_url:
+            if new_url not in st.session_state.urls:
+                # 逻辑处理
+                st.session_state.urls.append(new_url)
+                
+                with st.spinner('同步至云端...'):
+                    res = push_to_github(st.session_state.urls)
+                    if res.status_code == 200:
+                        st.toast("✅ 添加成功，已同步！")
+                        st.rerun() # 刷新上方列表
+                    else:
+                        st.error(f"同步失败: {res.status_code}")
+            else:
+                st.warning("该项目已在监控中。")
         else:
-            st.warning("该项目已在监控中。")
-    else:
-        st.error("请输入有效的网址。")
+            st.error("请输入有效的网址。")
+
+st.caption("提示：由于 GitHub API 延迟，若列表未更新请手动刷新页面。")
