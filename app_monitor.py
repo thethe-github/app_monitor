@@ -52,9 +52,16 @@ if st.button("确认添加"):
     if new_url and new_url not in urls:
         urls.append(new_url)
         res = update_github_config(urls, file_sha)
+        
         if res.status_code == 200:
             st.success("✅ 已添加并同步！")
             st.balloons()
             st.rerun()
+        else:
+            # 关键：如果失败，把 GitHub 的原话打印出来
+            st.error(f"❌ 同步失败！错误代码：{res.status_code}")
+            st.json(res.json()) 
+    elif not new_url:
+        st.warning("请输入有效的网址。")
     elif new_url in urls:
         st.warning("该网址已在监控清单中。")
